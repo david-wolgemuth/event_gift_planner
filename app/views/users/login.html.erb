@@ -1,0 +1,12 @@
+<% content_for(:title) { "#{event_name} login" } %>
+<h1>Login</h1>
+<form action="<%= authenticate_path %>" method="POST">
+  <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+  <label class="form-label">username
+    <input type="text" name="user[username]" class="form-control" placeholder="joe_shmoe">
+  </label>
+  <label class="form-label">password
+    <input type="password" name="user[password]" class="form-control" placeholder="secret1234">
+  </label>
+  <button type="submit" class="btn btn-primary">Login To `<%= event_name %>`</button>
+</form>

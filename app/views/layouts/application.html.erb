@@ -1,14 +1,39 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>XmasLists</title>
+    <title>wish list - <%= content_for(:title) || 'Event' %></title>
     <%= csrf_meta_tags %>
 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+      .form-label {
+        display: block;
+      }
+    </style>
   </head>
 
   <body>
-    <%= yield %>
+
+    <nav class="navbar navbar-inverse" style="background: #69A7AC">
+      <div class="container">
+        <!-- Links -->
+        <ul class="navbar-nav">
+          <% if event_name %>
+            <li class="navbar-brand"><%= link_to(event_name, event_path(event_params), class: 'btn btn-outline-secondary') %></li>
+          <% end %>
+          <%= content_for(:nav_links) %>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="container">
+      <%= yield %>
+    </main>
+
   </body>
 </html>

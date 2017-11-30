@@ -1,0 +1,76 @@
+<% content_for(:title) { 'overview' } %>
+<% content_for(:nav_links) do %>
+  <li>
+    <ul>
+      <li style="display: inline-block;"><%= link_to('your wishlist', wishlist_path(event_params), class: 'btn btn-outline-secondary btn-sm') %></li>
+      <% current_user.other_users_in_event.each do |user| %>
+        <li style="display: inline-block;">
+          <%= link_to(user.username, lists_path(event_params.merge(username: user.username)), class: "btn btn-outline-secondary btn-sm") %>
+        </li>
+      <% end %>
+      <li class="float-right"><%= link_to('logout', logout_path(event_params)) %></li>
+    </ul>
+  </li>
+<% end %>
+
+<h1><%= event_name %></h1>
+<ul>
+  <li>
+    <%= link_to('View Your Wishlist', wishlist_path(event_params)) %>
+  </li>
+  <li>
+    Members:
+    <ul>
+      <% current_user.other_users_in_event.each do |user| %>
+        <%= link_to(user.username, lists_path(username: user.username)) %>
+      <% end %>
+    </ul>
+  </li>
+</ul>
+
+<br>
+<h3>all items you've purchased</h3>
+<br>
+<table class="table">
+  <thead>
+    <tr>
+      <th>receiver</th>
+      <th>item</th>
+      <th>price</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% current_user.items_given.each do |item| %>
+      <tr>
+        <td>
+          <% item.receivers.map(&:username).each do |username| %>
+            <form action="<%= mark_item_not_purchased_path(event_params.merge(item_id: item.id)) %>" method="POST">
+              <%= link_to(username, lists_path(event_params.merge(username: username))) %>
+              <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+              <input type="hidden" name="username" value="<%= username %>">
+              <input type="hidden" name="item_id" value="<%= item.id %>">
+              <button type="submit" class="btn btn-outline-danger btn-sm">mark not purchased</button>
+            </form>
+          <% end %>
+          <form action="<%= mark_item_purchased_path(event_params.merge(item_id: item.id)) %>" method="post">
+            <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+            <select name="username">
+              <option disabled="disabled" selected="selected">select recipient</option>
+              <% current_user.other_users_in_event.where.not(username: item.receivers.map(&:username)).each do |u| %>
+                <option value="<%= u.username %>"><%= u.username %></option>
+              <% end %>
+            </select>
+            <input type="hidden" name="item_id" value="<%= item.id %>">
+            <button type="submit" class="btn btn-outline-info btn-sm">add another recipient to gift</button>
+          </form>
+        </td>
+        <td>
+          <%= link_to(item.title, item.listing_url) %>
+        </td>
+        <td>
+          <%= item.price %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

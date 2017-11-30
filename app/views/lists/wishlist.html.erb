@@ -1,0 +1,73 @@
+<% content_for(:title) { 'my list' } %>
+<% content_for(:nav_links) do %>
+  <li>
+    <ul>
+      <li style="display: inline-block;"><%= link_to('your wishlist', wishlist_path(event_params), class: 'btn btn-outline-primary btn-sm') %></li>
+      <% current_user.other_users_in_event.each do |user| %>
+        <li style="display: inline-block;"><%= link_to(user.username, lists_path(event_params.merge(username: user.username)), class: 'btn btn-outline-secondary btn-sm') %></li>
+      <% end %>
+      <li class="float-right"><%= link_to('logout', logout_path(event_params)) %></li>
+    </ul>
+  </li>
+<% end %>
+
+<br>
+<h1><%= current_user.username %> - your wish list</h1>
+<br>
+<table class="table">
+  <thead>
+    <tr>
+      <th>image</th>
+      <th>item</th>
+      <th>price</th>
+      <th class="hidden-xs-down">notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% current_user.items_in_wishlist.each do |item| %>
+      <tr>
+        <td>
+          <img class="img-responsive" src="<%= item.image_url %>" alt="no image found" height="64">
+        </td>
+        <td>
+          <%= link_to(item.title, item.listing_url) %>
+        </td>
+        <td>
+          <%= item.price %>
+        </td>
+        <td class="hidden-xs-down">
+          <q><%= item.notes || '-' %></q>
+        </td>
+      </tr>
+      <tr class="hidden-md-up">
+        <td style="border-top: none;">notes:</td>
+        <td colspan="2" style="border-top: none;">
+          <q><%= item.notes || '-' %></q>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<br>
+<hr>
+
+<h3>add items to your wish list:</h3>
+<form action="<%= wishlist_item_path %>" method="post">
+  <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+  <label class="form-label">gift name
+    <input type="text" name="item[title]" class="form-control" placeholder="teddy bear">
+  </label>
+  <label class="form-label">url to image
+    <input type="text" name="item[image_url]" class="form-control" placeholder="https://google.com/teddy_bear.jpg">
+  </label>
+  <label class="form-label">url to listing
+    <input type="text" name="item[listing_url]" class="form-control" placeholder="https://amazon.com/teddy_bear">
+  </label>
+  <label class="form-label">approximate price
+    <input type="number" name="item[price]" class="form-control" step="0.01" value="0.00" placeholder="https://amazon.com/teddy_bear">
+  </label>
+  <label class="form-label">notes
+    <textarea name="item[notes]" class="form-control" placeholder="i already have a black one, any other color is fine :)"></textarea>
+  </label>
+  <button type="submit" class="btn btn-primary">add item to wishlist</button>
+</form>
