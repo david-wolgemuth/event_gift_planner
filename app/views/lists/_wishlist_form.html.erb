@@ -1,0 +1,20 @@
+<% wishlist_user ||= current_user %>
+
+<%= simple_form_for :item, url: wishlist_item_path(event_params), method: :post do |item_form| %>
+
+  <h3>add an item to <%= (current_user==wishlist_user) ? 'your' : "#{wishlist_user.username}'s" %> wish list:</h3>
+  <br>
+
+  <%= item_form.input :title, placeholder: 'teddy bear' %>
+  <%= item_form.input :image_url, placeholder: 'https://google.com/teddy_bear.jpg' %>
+  <%= item_form.input :listing_url, placeholder: 'https://amazon.com/teddy_bear' %>
+  <%= item_form.input :price, label: 'Approximate Price', as: :decimal, input_html: { value: 0.00, step: 0.01 } %>
+  <%= item_form.input :notes, as: :text, placeholder: 'get one like what Austin has' %>
+
+  <% if current_user != wishlist_user %>
+    <%= hidden_field_tag :wishlist_user_id, wishlist_user.id %>
+  <% end %>
+
+  <%= item_form.submit 'add item to wishlist', class: 'btn btn-primary' %>
+
+<% end %>

@@ -17,162 +17,42 @@
 <% end %>
 
 <br>
-<h1><%= recipient.username %>'s gift list</h1>
+<h1><%= recipient.username %>'s wish list</h1>
+<% if current_user.managed_users.include?(recipient) %>
+  <div class="alert alert-info">
+    You are able to manage <%= recipient.username %>'s account
+    <%= link_to 'add a wishlist item on behalf of ' + recipient.username, '#',
+                data: { 'xmodal-target': :wishlist_form },
+                class: 'btn btn-outline-primary',
+                style: 'white-space: normal;' %>
+  </div> 
+  <%= xmodal(:wishlist_form) do %>
+    <%= render partial: 'wishlist_form', locals: { wishlist_user: recipient } %>
+  <% end %>
+<% end %>
 <br>
-<table class="table">
-  <thead>
-    <tr>
-      <th>fulfilled by</th>
-      <th>image</th>
-      <th>item</th>
-      <th>price</th>
-      <th class="hidden-xs-down">notes</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% recipient.items_in_wishlist.each do |item| %>
-      <tr>
-        <td>
-          <%= item.givers.map(&:username).join(', ') if item.givers.present? %>
-          <% if item.givers.include?(current_user) %>
-            <form action="<%= mark_item_not_purchased_path(event_params.merge(item_id: item.id)) %>" method="post">
-              <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
-              <input type="hidden" name="username" value="<%= recipient.username %>">
-              <input type="hidden" name="item_id" value="<%= item.id %>">
-              <button type="submit" class="btn btn-outline-danger btn-sm">mark not purchased</button>
-            </form>
-            <form action="<%= mark_item_purchased_path(event_params.merge(item_id: item.id)) %>" method="post">
-              <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
-              <select name="username" required="required">
-                <option disabled="disabled" selected="selected">select recipient</option>
-                <% current_user.other_users_in_event.reject{|u| u.username == recipient.username}.each do |u| %>
-                  <option value="<%= u.username %>"><%= u.username %></option>
-                <% end %>
-              </select>
-              <input type="hidden" name="item_id" value="<%= item.id %>">
-              <button type="submit" class="btn btn-outline-info btn-sm">add another recipient to gift</button>
-            </form>
-          <% else %>
-            <form action="<%= mark_item_purchased_path(event_params.merge(item_id: item.id)) %>" method="post">
-              <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
-              <input type="hidden" name="username" value="<%= recipient.username %>">
-              <input type="hidden" name="item_id" value="<%= item.id %>">
-              <button type="submit" class="btn btn-outline-primary btn-sm">mark purchased</button>
-            </form>
-          <% end %>
-        </td>
-        <td>
-          <img class="img-responsive" src="<%= item.image_url %>" alt="no image found" height="64">
-        </td>
-        <td>
-          <%= link_to(item.title, item.listing_url) %>
-        </td>
-        <td>
-          <%= item.price %>
-        </td>
-        <td class="hidden-xs-down">
-          <q><%= item.notes || '-' %></q>
-        </td>
-      </tr>
-      <tr class="hidden-md-up">
-        <td style="border-top: none;">notes:</td>
-        <td colspan="2" style="border-top: none;">
-          <q><%= item.notes || '-' %></q>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<%= render partial: 'recipient_wishlist_table' %>
 
 <br>
 <hr>
 
 <br>
-<h1>other items purchased for <%= recipient.username %></h1>
+<h3>items purchased for <%= recipient.username %>, but not on their wishlist</h3>
+<i>(<%= recipient.username %> cannot see this list)</i>
 <br>
-<table class="table">
-  <thead>
-    <tr>
-      <th>fulfilled</th>
-      <th>image</th>
-      <th>item</th>
-      <th>price</th>
-      <th class="hidden-xs-down">notes</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% (recipient.items_received - recipient.items_in_wishlist).each do |item| %>
-      <tr>
-        <td>
-          <%= item.givers.map(&:username).join(', ') if item.givers.present? %>
-          <% if item.givers.include?(current_user) %>
-            <form action="<%= mark_item_not_purchased_path(event_params.merge(item_id: item.id)) %>" method="post">
-              <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
-              <input type="hidden" name="username" value="<%= recipient.username %>">
-              <input type="hidden" name="item_id" value="<%= item.id %>">
-              <button type="submit" class="btn btn-outline-danger btn-sm">mark not purchased</button>
-            </form>
-            <form action="<%= mark_item_purchased_path(event_params.merge(item_id: item.id)) %>" method="post">
-              <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
-              <select name="username" required="required">
-                <option disabled="disabled" selected="selected">select recipient</option>
-                <% current_user.other_users_in_event.reject{|u| u.username == recipient.username}.each do |u| %>
-                  <option value="<%= u.username %>"><%= u.username %></option>
-                <% end %>
-              </select>
-              <input type="hidden" name="item_id" value="<%= item.id %>">
-              <button type="submit" class="btn btn-outline-info btn-sm">add another recipient to gift</button>
-            </form>
-          <% else %>
-            <form action="<%= mark_item_purchased_path(event_params.merge(item_id: item.id)) %>" method="post">
-              <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
-              <input type="hidden" name="username" value="<%= recipient.username %>">
-              <input type="hidden" name="item_id" value="<%= item.id %>">
-              <button type="submit" class="btn btn-outline-primary btn-sm">mark purchased</button>
-            </form>
-          <% end %>
-        </td>
-        <td>
-          <img class="img-responsive" src="<%= item.image_url %>" alt="no image found" height="64">
-        </td>
-        <td>
-          <%= link_to(item.title, item.listing_url) %>
-        </td>
-        <td>
-          <%= item.price %>
-        </td>
-        <td class="hidden-xs-down">
-          <q><%= item.notes || '-' %></q>
-        </td>
-      </tr>
-      <tr class="hidden-md-up">
-        <td style="border-top: none;">notes:</td>
-        <td colspan="2" style="border-top: none;">
-          <q><%= item.notes || '-' %></q>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
- 
-<h3>add items to <%= recipient.username %>'s list: <small>(everyone but <%= recipient.username %> will be able to see it)</small> </h3>
+<br>
 
-<form action="<%= purchased_item_path(event_params.merge(username: recipient.username)) %>" method="post">
-  <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
-  <label class="form-label">gift name
-    <input type="text" name="item[title]" class="form-control" placeholder="teddy bear">
-  </label>
-  <label class="form-label">url to image
-    <input type="text" name="item[image_url]" class="form-control" placeholder="https://google.com/teddy_bear.jpg">
-  </label>
-  <label class="form-label">url to listing
-    <input type="text" name="item[listing_url]" class="form-control" placeholder="https://amazon.com/teddy_bear">
-  </label>
-  <label class="form-label">approximate price
-    <input type="number" name="item[price]" class="form-control" step="0.01" value="0.00" placeholder="https://amazon.com/teddy_bear">
-  </label>
-  <label class="form-label">notes
-    <textarea name="item[notes]" class="form-control" placeholder="i already have a black one, any other color is fine :)"></textarea>
-  </label>
-  <button type="submit" class="btn btn-primary">add item to wishlist</button>
-</form>
+<% if current_user.managed_users.include?(recipient) %>
+  <i>because you are their manager -- you may not view this list</i>
+<% else %>
+  <%= render partial: 'recipient_purchased_list_table' %>
+
+  purchased something for <%= recipient.username %>?
+  <%= link_to "-add items to their list-", '#', data: { 'xmodal-target': :add_purchased_item_form }, class: 'tn tn-outline-primary' %>
+  <br>
+  <br>
+  <%= xmodal(:add_purchased_item_form) do %>
+    <%= render partial: 'add_purchased_item_form' %>
+  <% end %>
+<% end %>
+

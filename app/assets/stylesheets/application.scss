@@ -1,0 +1,78 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+abbr {
+  font-size: 0;
+}
+
+h1 { font-size: 32px; }
+h2 { font-size: 28px; }
+h3 { font-size: 24px; }
+
+.xmodal {
+  position: fixed;
+  left: 0; top: 0;
+  right: 0; bottom: 0;
+  z-index: 6;
+  background: rgba(52, 70, 86, 0.9);
+  overflow: scroll;
+
+  .xmodal-container {
+    background: white;
+    position: absolute;
+    border-radius: 4px;
+
+    // Center Horizontally
+    left: 0; right: 0;
+    margin: auto;
+    width: 40%;
+    padding: 24px;
+    @media(max-width: 1600px) {
+      width: 60%;
+      padding: 12px;
+      padding-bottom: 36px;
+    }
+    @media(max-width: 1024px) {
+      width: 80%;
+      padding: 12px;
+      padding-bottom: 36px;
+    }
+    @media(max-width: 760px) {
+      width: 98%;
+      padding: 12px;
+      padding-bottom: 36px;
+    }
+    .xmodal-title {
+      font-size: 2em;
+      font-weight: bold;
+      margin-bottom: 24px;
+    }
+
+    .xmodal-x {
+      font-size: 1.2em;
+      float: right;
+      transition: all 0.3s;
+      font-size: 1.2em;
+      padding: 0px 8px;
+      border-radius: 4px;
+      border: 1px solid;
+      &:hover {
+        color: white;
+        background: black;
+        transition: all 0.3s;
+      }
+    }
+  }
+}

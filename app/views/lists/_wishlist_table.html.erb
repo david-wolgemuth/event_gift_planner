@@ -1,0 +1,39 @@
+<% displayed_user ||= current_user %>
+<table class="table">
+  <thead>
+    <tr>
+      <th>image</th>
+      <th>item</th>
+      <th>price</th>
+      <th class="hidden-xs-down">notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% displayed_user.items_in_wishlist.each do |item| %>
+      <tr>
+        <td>
+          <img class="img-responsive" src="<%= item.image_url %>" alt="no image found" height="64">
+        </td>
+        <td>
+          <%= link_to(item.title, item.listing_url) %>
+        </td>
+        <td>
+          <%= item.price %>
+        </td>
+        <td class="hidden-xs-down">
+          <% if item.notes.present? %>
+            <q><%= item.notes %></q>
+          <% end %>
+        </td>
+      </tr>
+      <% if item.notes.present? %>
+        <tr class="hidden-md-up">
+          <td style="border-top: none;">notes:</td>
+          <td colspan="2" style="border-top: none;">
+            <q><%= item.notes || '-' %></q>
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>

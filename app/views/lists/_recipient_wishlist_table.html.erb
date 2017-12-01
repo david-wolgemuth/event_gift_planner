@@ -1,0 +1,44 @@
+<table class="table">
+  <thead>
+    <tr class="hidden-xs-down">
+      <th>fulfilled by</th>
+      <th>image</th>
+      <th>item</th>
+      <th>price</th>
+      <th>notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% recipient.items_in_wishlist.each do |item| %>
+      <tr style="border-top: 2px solid gray;">
+        <td class="hidden-xs-down">
+          <%= render partial: 'fulfillment_buttons', locals: { item: item } %>
+        </td>
+        <td>
+          <img class="img-responsive" src="<%= item.image_url %>" alt="no image found" height="64">
+        </td>
+        <td>
+          <%= link_to(item.title, item.listing_url) %>
+        </td>
+        <td>
+          <%= item.price %>
+        </td>
+        <td class="hidden-xs-down">
+          <q><%= item.notes || '-' %></q>
+        </td>
+      </tr>
+      <tr class="hidden-md-up">
+        <td style="border-top: none;">notes:</td>
+        <td colspan="2" style="border-top: none;">
+          <q><%= item.notes || '-' %></q>
+        </td>
+      </tr>
+      <tr class="hidden-md-up"  style="border-bottom: 2px solid gray;">
+        <td style="border-top: none;">fulfilled by:</td>
+        <td colspan="2" style="border-top: none;">
+          <%= render partial: 'fulfillment_buttons', locals: { item: item } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

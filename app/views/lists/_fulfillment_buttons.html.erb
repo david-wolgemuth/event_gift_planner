@@ -1,0 +1,27 @@
+<%= item.givers.map(&:username).join(', ') if item.givers.present? %>
+<% if item.givers.include?(current_user) %>
+  <form action="<%= mark_item_not_purchased_path(event_params.merge(item_id: item.id)) %>" method="post">
+    <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+    <input type="hidden" name="username" value="<%= recipient.username %>">
+    <input type="hidden" name="item_id" value="<%= item.id %>">
+    <button type="submit" class="btn btn-outline-danger btn-sm">mark not purchased</button>
+  </form>
+  <form action="<%= mark_item_purchased_path(event_params.merge(item_id: item.id)) %>" method="post">
+    <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+    <select name="username" required="required">
+      <option disabled="disabled" selected="selected">select recipient</option>
+      <% current_user.other_users_in_event.reject{|u| u.username == recipient.username}.each do |u| %>
+        <option value="<%= u.username %>"><%= u.username %></option>
+      <% end %>
+    </select>
+    <input type="hidden" name="item_id" value="<%= item.id %>">
+    <button type="submit" class="btn btn-outline-info btn-sm">add another recipient to gift</button>
+  </form>
+<% else %>
+  <form action="<%= mark_item_purchased_path(event_params.merge(item_id: item.id)) %>" method="post">
+    <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+    <input type="hidden" name="username" value="<%= recipient.username %>">
+    <input type="hidden" name="item_id" value="<%= item.id %>">
+    <button type="submit" class="btn btn-outline-primary btn-sm">mark purchased</button>
+  </form>
+<% end %>

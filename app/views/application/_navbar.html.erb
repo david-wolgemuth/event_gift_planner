@@ -1,0 +1,13 @@
+<nav class="navbar navbar-inverse" style="background: #69A7AC">
+  <div class="container">
+    <div class="row">
+      <!-- Links -->
+      <ul class="navbar-nav">
+        <% if event_name %>
+          <li class="navbar-brand"><%= link_to(event_name, event_path(event_params), class: 'btn btn-outline-secondary') %></li>
+        <% end %>
+        <%= content_for(:nav_links) %>
+      </ul>
+    </div>
+  </div>
+</nav>

@@ -12,6 +12,11 @@ class ListsController < ApplicationController
   end
 
   def create_wishlist_item
+    if params[:wishlist_user_id].present?
+      return create_wishlist_item_on_behalf_of_user(
+        current_user.managed_users.find(params[:wishlist_user_id])
+      )
+    end
     current_user.items_in_wishlist.create(item_params)
     redirect_to wishlist_path(event_params)
   end
@@ -44,6 +49,11 @@ class ListsController < ApplicationController
   end
 
 private
+
+  def create_wishlist_item_on_behalf_of_user(user)
+    user.items_in_wishlist.create(item_params)
+    redirect_to lists_path(event_params.merge(username: user.username))
+  end
 
   def recipient
     current_user.other_users_in_event.find_by_username(params[:username])

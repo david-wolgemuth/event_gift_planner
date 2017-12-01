@@ -32,4 +32,5 @@ class ApplicationController < ActionController::Base
     { event: params.require(:event) }
   end
 
+
 end
