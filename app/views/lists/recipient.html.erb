@@ -31,13 +31,18 @@
   <% end %>
 <% end %>
 <br>
-<%= render partial: 'recipient_wishlist_table' %>
+
+<% if recipient.items_in_wishlist.present? %>
+  <%= render partial: 'recipient_wishlist_table' %>
+<% else %>
+  <div class="alert alert-warning"><%= recipient.username %> hasn't added anything to their wishlist</div>
+<% end %>
 
 <br>
 <hr>
 
 <br>
-<h3>items purchased for <%= recipient.username %>, but not on their wishlist</h3>
+<h3>other items purchased for <%= recipient.username %></h3>
 <i>(<%= recipient.username %> cannot see this list)</i>
 <br>
 <br>
@@ -45,10 +50,17 @@
 <% if current_user.managed_users.include?(recipient) %>
   <i>because you are their manager -- you may not view this list</i>
 <% else %>
-  <%= render partial: 'recipient_purchased_list_table' %>
+  <div class="alert alert-info">
+    <h4>purchased something for <%= recipient.username %>?</h4>
+    <p>add it to this list so everyone else know's not to buy one</p>
+    <%= link_to "add an item!", '#', data: { 'xmodal-target': :add_purchased_item_form }, class: 'btn btn-outline-primary' %>
+  </div>
+  <% if (recipient.items_received - recipient.items_in_wishlist).present? %>
+    <%= render partial: 'recipient_purchased_list_table' %>
+  <% else %>
+    <div class="alert alert-warning">no items on this list yet</div>
+  <% end %>
 
-  purchased something for <%= recipient.username %>?
-  <%= link_to "-add items to their list-", '#', data: { 'xmodal-target': :add_purchased_item_form }, class: 'tn tn-outline-primary' %>
   <br>
   <br>
   <%= xmodal(:add_purchased_item_form) do %>

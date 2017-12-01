@@ -13,16 +13,18 @@
 
 <br>
 <h1><%= current_user.username %></h1>
-<h4>your wish list </h4>
+<div class="alert alert-info">
+  <h4>your wish list</h4>
+  <p>add items to your wishlist so we know what you want</p>
+  <%= link_to 'add an item!', '#', data: { 'xmodal-target': :wishlist_form }, class: 'btn btn-outline-primary' %>
+</div>
+<%= xmodal(:wishlist_form) do %>
+  <%= render partial: 'wishlist_form' %>
+<% end %>
 <br>
 
 <% if current_user.items_in_wishlist.present? %>
   <%= render partial: 'wishlist_table' %>
 <% else %>
   You have no items in your wishlist!
-<% end %>
-
-<%= link_to 'add a wishlist item!', '#', data: { 'xmodal-target': :wishlist_form }, class: 'btn btn-outline-primary' %>
-<%= xmodal(:wishlist_form) do %>
-  <%= render partial: 'wishlist_form' %>
 <% end %>
