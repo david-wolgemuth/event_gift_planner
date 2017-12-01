@@ -15,6 +15,18 @@ class User < ApplicationRecord
   has_many :items_given,
     through: :items_givers,
     source: :item
+  
+  has_and_belongs_to_many :managed_users,
+    join_table: :managements,
+    foreign_key: :manager_id,
+    association_foreign_key: :managed_user_id,
+    class_name: :User
+
+  has_and_belongs_to_many :managers,
+    join_table: :managements,
+    foreign_key: :managed_user_id,
+    association_foreign_key: :manager_id,
+    class_name: :User
 
   has_secure_password
 
