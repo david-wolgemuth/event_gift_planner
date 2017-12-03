@@ -1,4 +1,4 @@
-<table class="table">
+<table class="table table-responsive">
   <thead>
     <tr class="hidden-xs-down">
       <th>status</th>
@@ -15,7 +15,7 @@
           <%= render partial: 'fulfillment_buttons', locals: { item: item } %>
         </td>
         <td>
-          <img class="img-responsive" src="<%= item.image_url %>" alt="no image found" height="64">
+          <img class="img-responsive" src="<%= item.image_url %>" alt="no image found" height="64" width="64">
         </td>
         <td>
           <%= link_to(item.title, item.listing_url) %>
