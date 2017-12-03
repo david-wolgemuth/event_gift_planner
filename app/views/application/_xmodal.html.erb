@@ -14,13 +14,3 @@
     </div>
   </div>
 </div>
-<script>
-  /* Move `<%= modal_name %>`` xModal -> xModals Container */
-  (function () {
-    'use strict';
-    var $thisScript = $('script').last();
-    var $xmodal = $thisScript.prev();
-    var $xmodalsContainer = $('#xmodals-container')
-    $xmodal.detach().appendTo($xmodalsContainer);
-  })();
-</script>

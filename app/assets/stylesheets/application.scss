@@ -12,7 +12,9 @@
  *
  *= require_tree .
  *= require_self
+ *= require font-awesome
  */
+@import "font-awesome";
 abbr {
   font-size: 0;
 }
@@ -21,10 +23,12 @@ h1 { font-size: 32px; }
 h2 { font-size: 28px; }
 h3 { font-size: 24px; }
 
+
 .xmodal {
   position: fixed;
   left: 0; top: 0;
   right: 0; bottom: 0;
+  padding-top: 20px;
   z-index: 6;
   background: rgba(52, 70, 86, 0.9);
   overflow: scroll;
@@ -33,6 +37,7 @@ h3 { font-size: 24px; }
     background: white;
     position: absolute;
     border-radius: 4px;
+    overflow: scroll;
 
     // Center Horizontally
     left: 0; right: 0;
@@ -58,6 +63,10 @@ h3 { font-size: 24px; }
       font-size: 2em;
       font-weight: bold;
       margin-bottom: 24px;
+    }
+    .xmodal-content {
+      height: 90%;
+      overflow: scroll;
     }
 
     .xmodal-x {

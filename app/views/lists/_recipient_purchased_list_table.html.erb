@@ -1,7 +1,7 @@
 <table class="table">
   <thead>
     <tr class="hidden-xs-down">
-      <th>purchased by</th>
+      <th>status</th>
       <th>image</th>
       <th>item</th>
       <th>price</th>
@@ -11,7 +11,7 @@
   <tbody>
     <% (recipient.items_received - recipient.items_in_wishlist).each do |item| %>
       <tr style="border-top: 2px solid gray;">
-        <td class="hidden-xs-down">
+        <td>
           <%= render partial: 'fulfillment_buttons', locals: { item: item } %>
         </td>
         <td>
@@ -27,18 +27,13 @@
           <q><%= item.notes || '-' %></q>
         </td>
       </tr>
-      <tr class="hidden-md-up">
-        <td style="border-top: none;">notes:</td>
-        <td colspan="2" style="border-top: none;">
-          <q><%= item.notes || '-' %></q>
-        </td>
-      </tr>
-      <tr class="hidden-md-up"  style="border-bottom: 2px solid gray;">
-        <td style="border-top: none;">purchased by:</td>
-        <td colspan="2" style="border-top: none;">
-          <%= render partial: 'fulfillment_buttons', locals: { item: item } %>
-        </td>
-      </tr>
+      <% if item.notes %>
+        <tr class="hidden-md-up">
+          <td colspan="4" style="border-top: none; text-align: right;">
+            <q><%= item.notes%></q>
+          </td>
+        </tr>
+      <% end %>
     <% end %>
   </tbody>
 </table>

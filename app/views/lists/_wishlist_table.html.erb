@@ -2,6 +2,7 @@
 <table class="table">
   <thead>
     <tr>
+      <th></th>
       <th>image</th>
       <th>item</th>
       <th>price</th>
@@ -12,7 +13,17 @@
     <% displayed_user.items_in_wishlist.each do |item| %>
       <tr>
         <td>
-          <img class="img-responsive" src="<%= item.image_url %>" alt="no image found" height="64">
+          <%= render partial: 'edit_wishlist_item_form', locals: { item: item, wishlist_user: current_user } %>
+          <br>
+          <%= link_to remove_item_from_wishlist_path(item, event_params), method: :delete, class: 'btn btn-sm btn-outline-danger', data: { confirm: 'remove this item?' } do %>
+            <%= fa_icon 'trash-o' %>
+            <span class="hidden-xs-down">remove</span>
+          <% end %>
+        </td>
+        <td>
+          <% if item.image_url.include?('http') %>
+            <img class="img-responsive" src="<%= item.image_url %>" alt="bad image url" height="64">
+          <% end %>
         </td>
         <td>
           <%= link_to(item.title, item.listing_url) %>
@@ -28,8 +39,7 @@
       </tr>
       <% if item.notes.present? %>
         <tr class="hidden-md-up">
-          <td style="border-top: none;">notes:</td>
-          <td colspan="2" style="border-top: none;">
+          <td colspan="4" style="border-top: none; text-align: right;">
             <q><%= item.notes || '-' %></q>
           </td>
         </tr>

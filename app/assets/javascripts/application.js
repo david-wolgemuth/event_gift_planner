@@ -16,8 +16,11 @@
 //= require_tree .
 function ready () {
   'use strict';
+  console.log('reloaded');
+
   const $xmodalsContainer = $('#xmodals-container');
-  const $xmodals = $xmodalsContainer.find('.xmodal');
+  const $xmodals = $('.xmodal');
+  $xmodals.detach().appendTo($xmodalsContainer);
   const $xmodalTriggers = $('*[data-xmodal-target]');
 
   const $confirmationModalTriggers = $('*[data-confirm-title], *[data-confirm-message]');
@@ -75,5 +78,4 @@ function ready () {
   $xmodals.on('click', xmodalClickedOutsideContent);
 }
 
-$(document).ready(ready);
 $(document).on('turbolinks:load', ready); 

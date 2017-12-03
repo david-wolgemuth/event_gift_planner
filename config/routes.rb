@@ -11,6 +11,10 @@ Rails.application.routes.draw do
       post '/wishlist_item' => 'lists#create_wishlist_item'
       post '/purchased_item' => 'lists#create_purchased_item'
 
+      put '/wishlist_item/:id' => 'lists#edit_wishlist_item', as: :edit_wishlist_item
+
+      delete '/wishlist_item/:id' => 'lists#remove_item_from_wishlist', as: :remove_item_from_wishlist
+
       post '/mark_item_purchased' => 'lists#mark_item_purchased'
       post '/mark_item_not_purchased' => 'lists#mark_item_not_purchased'
 

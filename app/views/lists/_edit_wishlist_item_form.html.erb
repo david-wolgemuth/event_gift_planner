@@ -1,0 +1,22 @@
+
+<%= link_to '#', data: { 'xmodal-target': "edit-item-#{item.id}" }, class: 'btn btn-sm btn-outline-info' do %>
+  <%= fa_icon 'pencil-square-o' %>
+  <span class="hidden-xs-down">edit</span>
+<% end %>
+<%= xmodal("edit-item-#{item.id}") do %>
+  <%= simple_form_for item, url: edit_wishlist_item_path(item, event_params), method: :put do |item_form| %>
+
+    <%= item_form.input :title, placeholder: 'teddy bear' %>
+    <%= item_form.input :image_url, placeholder: 'https://google.com/teddy_bear.jpg' %>
+    <%= item_form.input :listing_url, placeholder: 'https://amazon.com/teddy_bear (type "#" if not applicable)' %>
+    <%= item_form.input :price, label: 'Approximate Price', as: :decimal, input_html: { value: item.price || 0.00, step: 0.01 } %>
+    <%= item_form.input :notes, as: :text, placeholder: 'get one like what Austin has' %>
+
+    <% if current_user != wishlist_user %>
+      <%= hidden_field_tag :wishlist_user_id, wishlist_user.id %>
+    <% end %>
+
+    <%= item_form.submit 'update item', class: 'btn btn-primary' %>
+  <% end %>
+
+<% end %>
